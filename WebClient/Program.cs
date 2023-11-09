@@ -1,10 +1,38 @@
 namespace WebClient
 {
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+    using WebClient.Services;
+
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.Configure<IdentityServerSettings>(
+                builder.Configuration.GetSection("IdentityServerSettings"));
+
+            builder.Services.AddScoped<ITokenService, TokenService>();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme,
+                    options =>
+                    {
+                        //options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        //options.SignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                        options.Authority = "https://localhost:5443";
+                        options.ClientId = "interactive";
+                        options.ClientSecret = "ClientSecret1";
+                        options.ResponseType = "code";
+                        options.SaveTokens = true;
+                        options.GetClaimsFromUserInfoEndpoint = true;
+                    });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -19,10 +47,12 @@ namespace WebClient
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
