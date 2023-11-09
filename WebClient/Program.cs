@@ -2,6 +2,7 @@ namespace WebClient
 {
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+    using Services.Interfaces;
     using WebClient.Services;
 
     public class Program
