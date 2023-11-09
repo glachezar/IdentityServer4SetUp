@@ -3,6 +3,8 @@ namespace Server
     using System.Reflection;
     using Data;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc.ViewFeatures;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
     public class Program
@@ -48,6 +50,12 @@ namespace Server
                             opt => opt.MigrationsAssembly(assembly));
                 })
                 .AddDeveloperSigningCredential();
+
+            builder.Services.AddAuthorization();
+            builder.Services.AddControllers();
+            builder.Services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
+            builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
 
             var app = builder.Build();
             app.UseStaticFiles();

@@ -14,9 +14,9 @@
         public static IEnumerable<ApiScope> ApiScopes =>
             new[]
             {
-                new ApiScope("CoffeeAPI"), 
+                new ApiScope("CoffeeAPI"),
             };
-
+        
 
         public static IEnumerable<Client> Clients =>
             new[]
@@ -31,7 +31,7 @@
                     FrontChannelLogoutUri = "https://localhost:5444/signout-oidc",
                     PostLogoutRedirectUris = { "https://localhost:5444/signout-callback-oidc" },
                     AllowOfflineAccess = true,
-                    AllowedScopes = {"openid", "profile", "CoffeeAPI"},
+                    AllowedScopes = {"CoffeeAPI", "openid", "profile"},
                     RequireConsent = false,
                 },
             };
