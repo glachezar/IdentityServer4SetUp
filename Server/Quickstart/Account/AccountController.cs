@@ -45,8 +45,7 @@ namespace IdentityServerHost.Quickstart.UI
             IEventService events,
             SignInManager<IdentityUser> signInManager)
         {
-            // if the TestUserStore is not in DI, then we'll just use the global users collection
-            // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
+
 
             _interaction = interaction;
             _clientStore = clientStore;
@@ -117,7 +116,6 @@ namespace IdentityServerHost.Quickstart.UI
                 if (user is not null)
                 {
                     var userLogin = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
-
 
                     if (userLogin == Microsoft.AspNetCore.Identity.SignInResult.Success)
                     {
