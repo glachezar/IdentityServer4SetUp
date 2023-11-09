@@ -1,5 +1,6 @@
 ﻿namespace WebClient.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Diagnostics;
     using WebClient.Models;
@@ -18,6 +19,7 @@
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
