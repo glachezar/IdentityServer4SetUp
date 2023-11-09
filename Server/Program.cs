@@ -36,6 +36,9 @@ namespace Server
 
             builder.Services.AddIdentityServer()
                 .AddAspNetIdentity<IdentityUser>()
+                .AddInMemoryApiScopes(Config.ApiScopes)
+                .AddInMemoryIdentityResources(Config.IdentityResources())
+                .AddInMemoryClients(Config.Clients)
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = b =>
@@ -51,11 +54,14 @@ namespace Server
                 })
                 .AddDeveloperSigningCredential();
 
-            builder.Services.AddAuthorization();
-            builder.Services.AddControllers();
-            builder.Services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
-            builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            builder.Services.ConfigureApplicationCookie(config =>
+            {
+                config.Cookie.Name = "CoffeeShopCookie";
+                config.LoginPath = "/Auth/Login";
+            });
 
+            builder.Services.AddAuthorization();
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
             app.UseStaticFiles();
